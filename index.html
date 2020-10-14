@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clicker Game</title>
+    <style>
+        #canvas{
+            position: absolute;
+            user-select: none;
+        }
+        #canvas2{
+            position: absolute;
+            left: 100px;
+            top: 200px;
+            user-select: none;
+        }
+        #money-text{
+            position: absolute;
+            top: -15px;
+            font-weight: bolder;
+            font-family: "Comic Sans MS", serif;
+            color: black;
+            user-select: none;
+        }
+
+        #enemy-text {
+            position: absolute;
+            top: -15px;
+            left: 132px;
+            font-weight: bolder;
+            font-family: "Comic Sans MS", serif;
+            color: black;
+            user-select: none;
+        }
+
+        #game-money{
+            position: absolute;
+            left: 75px;
+            top: 5px;
+            font-size: 18px;
+            font-weight: bolder;
+            font-family: "Comic Sans MS",serif;
+            color: black;
+            user-select: none;
+        }
+
+        #enemy-hp
+        {
+            position: absolute;
+            left: 232px;
+            top: 5px;
+            font-size: 18px;
+            font-weight: bolder;
+            font-family: "Comic Sans MS",serif;
+            color: black;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="800" height="600" style="background-color: gainsboro"></canvas>
+<canvas id="canvas2" width="500" height="300" style="background-color: gainsboro"></canvas>
+<script src="game.js"></script>
+<span id="game-money">0</span>
+<h3 id="money-text">Money:</h3>
+<span id="enemy-hp">100</span>
+<h3 id="enemy-text">Enemy HP:</h3>
+</body>
+</html>
