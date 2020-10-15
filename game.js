@@ -125,7 +125,7 @@ class Game
         this.hp = 100;
         this.shotSound = new Audio();
         this.shotSound.src = "sound/shot.mp3";
-        this.effectDeleteInterval = 20;
+        this.effectDeleteInterval = 30;
         this.effectTimer = 1;
         this.shot_effect = []
         this.money = 0;
