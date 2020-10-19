@@ -1,8 +1,8 @@
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 600;
 
-const CANVAS2_WIDTH = 500;
-const CANVAS2_HEIGHT = 280;
+const CANVAS2_WIDTH = 470;
+const CANVAS2_HEIGHT = 250;
 
 const SHOTEFFECT_WIDTH = 50;
 const SHOTEFFECT_HEIGHT = 50;
@@ -13,7 +13,6 @@ const TANK_HEIGHT = 260;
 canvas = document.getElementById("canvas");
 canvas2 = document.getElementById("canvas2");
 ctx = canvas2.getContext("2d");
-
 canvas2.addEventListener("click", (e) => {
     game._enemyUpdate(2);
     Helper.playSound(game.shotSound);
@@ -64,6 +63,28 @@ class Helper
         sound.play().then(() => {}).catch(() => {})
     }
 }
+
+class CanvasStroke
+{
+    constructor(x, y, context) {
+        this.x = x;
+        this.y = y;
+        this.ctx = context;
+    }
+
+    update()
+    {
+    }
+
+    draw()
+    {
+        ctx.rect(this.x, this.y, CANVAS2_WIDTH, CANVAS2_HEIGHT);
+        ctx.stroke();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 7;
+    }
+}
+
 
 class ShotEffect
 {
@@ -120,16 +141,21 @@ class Game
     constructor(context)
     {
         this.ctx = context;
-        this.tank = new Tank(90,0,this.ctx);
-        this.enemyhp = 100;
-        this.hp = 100;
+        this.tank = new Tank(40,-10,this.ctx);
+        this.canvasstroke = new CanvasStroke(0,0,this.ctx);
+        this.enemyhp = 1000;
         this.shotSound = new Audio();
         this.shotSound.src = "sound/shot.mp3";
-        this.effectDeleteInterval = 30;
-        this.effectTimer = 1;
+        this.enemydownSound = new Audio();
+        this.enemydownSound.src = "sound/enemydown.mp3";
+        this.effectDeleteInterval = 10;
+        this.effectTimer = 0;
         this.shot_effect = []
+        this.tankimg = new Image();
+        this.tankimg.src = "img/tank.png";
+        this.enemys = [this.tankimg,];
         this.money = 0;
-        this.damage = 2;
+        this.damage = 20;
         this.loop();
     }
 
@@ -151,6 +177,7 @@ class Game
             }
 
         });
+
         this.effectTimer++;
 
     }
@@ -159,6 +186,7 @@ class Game
     {
         this.ctx.clearRect(0,0,CANVAS2_WIDTH,CANVAS2_HEIGHT);
         this.tank.draw();
+        this.canvasstroke.draw();
         for (let e in this.shot_effect)
         {
             if (this.shot_effect.hasOwnProperty(e))
@@ -178,14 +206,17 @@ class Game
     {
         if (this.enemyhp === 0)
         {
-            this.enemyhp = 100;
+            this.enemyhp =  1000;
             this._moneyUpdate(20);
+            this.shotSound.pause();
+            Helper.playSound(this.enemydownSound);
         }
         else{
             this.enemyhp -= this.damage;
             document.getElementById("enemy-hp").innerText = '' + this.enemyhp;
         }
     }
+
 }
 game = new Game(ctx);
 game.update();
