@@ -19,6 +19,13 @@ const ROCKET_HEIGHT = 70;
 const TANK_X = 40;
 const TANK_Y = -10;
 
+const JET_X = 60;
+const JET_Y = 0;
+
+const JET_WIDTH = 380;
+const JET_HEIGHT = 290;
+
+
 canvas = document.getElementById("canvas");
 canvas2 = document.getElementById("canvas2");
 ctx = canvas2.getContext("2d");
@@ -28,6 +35,7 @@ canvas2.addEventListener("click", (e) => {
     if (game.enemyhp <= 0)
     {
         game.enemyhp =  1000;
+        game._newEnemy();
         game._moneyUpdate(50);
         game.shotSound.pause();
         game._destroyedTank();
@@ -235,6 +243,8 @@ class Game
         this.rocketMiniImg.src = "img/rocketmini.png";
         this.tankimg = new Image();
         this.tankimg.src = "img/tank.png";
+        this.jetimg = new Image();
+        this.jetimg.src = "img/jet.png";
         this.shot_effect = [];
         this.rockets = [];
         this.money = 0;
@@ -244,6 +254,8 @@ class Game
         this.rocketPrice = 50;
         this.num = 5;
         this.destroyedEnemies = 0;
+        this.enemies = [this.tankimg,this.jetimg];
+        this.i = Helper.getRandomInt(0,1);
         this.loop();
     }
 
@@ -282,6 +294,7 @@ class Game
                 if (this.enemyhp < 0)
                 {
                     this.enemyhp =  1000;
+                    this._newEnemy();
                     this._moneyUpdate(50);
                     this.shotSound.pause();
                     this._destroyedTank();
@@ -308,12 +321,23 @@ class Game
             ROCKET_MINI_WIDTH, ROCKET_MINI_HEIGHT
         )
 
-        this.ctx.drawImage(
-            this.tankimg,
-            TANK_X, TANK_Y,
-            TANK_WIDTH, TANK_HEIGHT,
-        );
+        if (this.i === 0)
+        {
+            this.ctx.drawImage(
+                this.enemies[this.i],
+                TANK_X, TANK_Y,
+                TANK_WIDTH, TANK_HEIGHT
+            );
+        }
+        if (this.i === 1)
+        {
+            this.ctx.drawImage(
+                this.enemies[this.i],
+                JET_X, JET_Y,
+                JET_WIDTH, JET_HEIGHT
+            );
 
+        }
         for (let s in this.shot_effect)
         {
             if (this.shot_effect.hasOwnProperty(s))
@@ -344,6 +368,7 @@ class Game
         {
             this.enemyhp =  1000;
             this._moneyUpdate(50);
+            this._newEnemy();
             this.shotSound.pause();
             this._destroyedTank();
             Helper.playSound(this.enemydownSound);
@@ -366,6 +391,11 @@ class Game
     {
         this.destroyedEnemies++;
         document.getElementById("destroyed-enemies").innerText = '' + this.destroyedEnemies;
+    }
+
+    _newEnemy()
+    {
+        this.i = Helper.getRandomInt(0,1);
     }
 
 }
