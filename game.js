@@ -37,13 +37,11 @@ canvas2.addEventListener("click", (e) => {
         game.enemyhp =  1000;
         game._newEnemy();
         game._moneyUpdate(50);
-        game.shotSound.pause();
-        game._destroyedTank();
+        game._destroyedEnemy();
         Helper.playSound(game.enemydownSound);
         document.getElementById("game-money").innerText = '' + game.money;
         document.getElementById("enemy-hp").innerText = '' + game.enemyhp;
     }
-    Helper.playSound(game.shotSound);
     game.shot_effect.push(
         new ShotEffect(
             Helper.getRandomInt(50, CANVAS2_WIDTH - SHOTEFFECT_WIDTH),
@@ -69,6 +67,7 @@ function keyPush()
                     game.ctx
                 ));
             game._buyUpdate(game.rocketPrice);
+            Helper.playSound(game.buySound);
         }
     }
 }
@@ -231,12 +230,15 @@ class Game
         this.ctx = context;
         this.canvasstroke = new CanvasStroke(0,0,this.ctx);
         this.enemyhp = 1000;
-        this.shotSound = new Audio();
-        this.shotSound.src = "sound/shot.mp3";
+
         this.enemydownSound = new Audio();
         this.enemydownSound.src = "sound/enemydown.mp3";
         this.rocketSound = new Audio();
         this.rocketSound.src = "sound/rocketsound.wav";
+        this.backgroundMusic = new Audio();
+        this.backgroundMusic.src = "sound/backgroundmusic.mp3";
+        this.buySound = new Audio();
+        this.buySound.src = "sound/buy.wav";
         this.effectDeleteInterval = 10;
         this.effectTimer = 0;
         this.rocketMiniImg = new Image();
@@ -277,6 +279,8 @@ class Game
 
     update()
     {
+        this.backgroundMusic.play();
+        this.backgroundMusic.loop;
         this.shot_effect.forEach((effect, index) => {
             if (this.effectTimer % this.effectDeleteInterval === 0)
             {
@@ -296,8 +300,7 @@ class Game
                     this.enemyhp =  1000;
                     this._newEnemy();
                     this._moneyUpdate(50);
-                    this.shotSound.pause();
-                    this._destroyedTank();
+                    this._destroyedEnemy();
                     Helper.playSound(this.enemydownSound);
                     document.getElementById("game-money").innerText = '' + this.money;
                     document.getElementById("enemy-hp").innerText = '' + this.enemyhp;
@@ -369,8 +372,7 @@ class Game
             this.enemyhp =  1000;
             this._moneyUpdate(50);
             this._newEnemy();
-            this.shotSound.pause();
-            this._destroyedTank();
+            this._destroyedEnemy();
             Helper.playSound(this.enemydownSound);
             document.getElementById("game-money").innerText = '' + this.money;
             document.getElementById("enemy-hp").innerText = '' + this.enemyhp;
@@ -387,7 +389,7 @@ class Game
         document.getElementById("game-money").innerText = '' + this.money;
     }
 
-    _destroyedTank()
+    _destroyedEnemy()
     {
         this.destroyedEnemies++;
         document.getElementById("destroyed-enemies").innerText = '' + this.destroyedEnemies;
