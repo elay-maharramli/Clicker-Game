@@ -55,8 +55,17 @@ function keyPush()
 {
     if (event.keyCode === 49)
     {
-
         if (game.money >= game.rocketPrice)
+        {
+            game._buyUpdate(game.rocketPrice);
+            Helper.playSound(game.buySound);
+            game.buyedRockets++;
+        }
+    }
+
+    if (event.keyCode === 82)
+    {
+        if (game.buyedRockets > 0)
         {
             game.rockets.push(
                 new Rocket(
@@ -66,8 +75,7 @@ function keyPush()
                     game.yspeed += 0.2,
                     game.ctx
                 ));
-            game._buyUpdate(game.rocketPrice);
-            Helper.playSound(game.buySound);
+            game.buyedRockets--;
         }
     }
 }
@@ -258,6 +266,7 @@ class Game
         this.destroyedEnemies = 0;
         this.enemies = [this.tankimg,this.jetimg];
         this.i = Helper.getRandomInt(0,1);
+        this.buyedRockets = 0;
         this.loop();
     }
 
