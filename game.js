@@ -25,6 +25,15 @@ ctx = canvas2.getContext("2d");
 ctx2 = canvas.getContext("2d");
 canvas2.addEventListener("click", (e) => {
     game._enemyUpdate(20);
+    if (game.enemyhp <= 0)
+    {
+        game.enemyhp =  1000;
+        game._moneyUpdate(50);
+        game.shotSound.pause();
+        Helper.playSound(game.enemydownSound);
+        document.getElementById("game-money").innerText = '' + game.money;
+        document.getElementById("enemy-hp").innerText = '' + game.enemyhp;
+    }
     Helper.playSound(game.shotSound);
     game.shot_effect.push(
         new ShotEffect(
@@ -39,14 +48,15 @@ function keyPush()
 {
     if (event.keyCode === 49)
     {
+
         if (game.money >= game.rocketPrice)
         {
             game.rockets.push(
                 new Rocket(
                     CANVAS2_WIDTH,
                     -75,
-                    game.xspeed += 0.1,
-                    game.yspeed += 0.1,
+                    game.xspeed += 0.2,
+                    game.yspeed += 0.2,
                     game.ctx
                 ));
             game._buyUpdate(game.rocketPrice);
@@ -231,6 +241,7 @@ class Game
         this.xspeed = 10;
         this.yspeed = 10;
         this.rocketPrice = 50;
+        this.num = 5;
         this.loop();
     }
 
@@ -262,10 +273,19 @@ class Game
         });
 
         this.rockets.forEach((rocket, index) => {
-            if (rocket.x <= TANK_X + 300 & rocket.y > TANK_Y + 70)
+            if (rocket.x <= TANK_X + 300 + this.num & rocket.y > TANK_Y + 70 + this.num)
             {
                 Helper.removeIndex(this.rockets, index);
                 this._enemyUpdate(100);
+                if (this.enemyhp < 0)
+                {
+                    this.enemyhp =  1000;
+                    this._moneyUpdate(50);
+                    this.shotSound.pause();
+                    Helper.playSound(this.enemydownSound);
+                    document.getElementById("game-money").innerText = '' + this.money;
+                    document.getElementById("enemy-hp").innerText = '' + this.enemyhp;
+                }
                 Helper.playSound(this.rocketSound);
             }
             rocket.update();
@@ -275,7 +295,7 @@ class Game
 
     draw()
     {
-        this.ctx.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+        ctx.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
         this.canvasstroke.draw();
 
 
@@ -317,12 +337,14 @@ class Game
 
     _enemyUpdate(damage)
     {
-        if (this.enemyhp <= 0)
+        if (this.enemyhp === 0)
         {
             this.enemyhp =  1000;
             this._moneyUpdate(50);
             this.shotSound.pause();
             Helper.playSound(this.enemydownSound);
+            document.getElementById("game-money").innerText = '' + this.money;
+            document.getElementById("enemy-hp").innerText = '' + this.enemyhp;
         }
         else{
             this.enemyhp -= damage;
