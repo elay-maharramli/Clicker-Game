@@ -30,6 +30,7 @@ canvas2.addEventListener("click", (e) => {
         game.enemyhp =  1000;
         game._moneyUpdate(50);
         game.shotSound.pause();
+        game._destroyedTank();
         Helper.playSound(game.enemydownSound);
         document.getElementById("game-money").innerText = '' + game.money;
         document.getElementById("enemy-hp").innerText = '' + game.enemyhp;
@@ -242,6 +243,7 @@ class Game
         this.yspeed = 10;
         this.rocketPrice = 50;
         this.num = 5;
+        this.destroyedEnemies = 0;
         this.loop();
     }
 
@@ -282,6 +284,7 @@ class Game
                     this.enemyhp =  1000;
                     this._moneyUpdate(50);
                     this.shotSound.pause();
+                    this._destroyedTank();
                     Helper.playSound(this.enemydownSound);
                     document.getElementById("game-money").innerText = '' + this.money;
                     document.getElementById("enemy-hp").innerText = '' + this.enemyhp;
@@ -342,6 +345,7 @@ class Game
             this.enemyhp =  1000;
             this._moneyUpdate(50);
             this.shotSound.pause();
+            this._destroyedTank();
             Helper.playSound(this.enemydownSound);
             document.getElementById("game-money").innerText = '' + this.money;
             document.getElementById("enemy-hp").innerText = '' + this.enemyhp;
@@ -356,6 +360,12 @@ class Game
     {
         this.money -= value;
         document.getElementById("game-money").innerText = '' + this.money;
+    }
+
+    _destroyedTank()
+    {
+        this.destroyedEnemies++;
+        document.getElementById("destroyed-enemies").innerText = '' + this.destroyedEnemies;
     }
 
 }
