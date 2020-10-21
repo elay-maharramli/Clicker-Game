@@ -34,13 +34,24 @@ canvas2.addEventListener("click", (e) => {
     game._enemyUpdate(20);
     if (game.enemyhp <= 0)
     {
-        game.enemyhp =  1000;
+        game.enemyhp =  500;
         game._newEnemy();
         game._moneyUpdate(50);
         game._destroyedEnemy();
+        game._pointUpdate(20)
         Helper.playSound(game.enemydownSound);
         document.getElementById("game-money").innerText = '' + game.money;
         document.getElementById("enemy-hp").innerText = '' + game.enemyhp;
+        document.getElementById("game-point").innerText = '' + game.point;
+        if (game.point === game.levelUpPoint)
+        {
+            game.level++;
+            game.levelUpPoint += 20;
+            game.point = 0;
+            document.getElementById("game-point").innerText = '' + game.point;
+            document.getElementById("level-up-point").innerText = '' + game.levelUpPoint;
+            document.getElementById("game-level").innerText = '' + game.level;
+        }
     }
     game.shot_effect.push(
         new ShotEffect(
@@ -60,6 +71,7 @@ function keyPush()
             game._buyUpdate(game.rocketPrice);
             Helper.playSound(game.buySound);
             game.buyedRockets++;
+            document.getElementById("rockets").innerText = '' + game.buyedRockets;
         }
     }
 
@@ -76,6 +88,7 @@ function keyPush()
                     game.ctx
                 ));
             game.buyedRockets--;
+            document.getElementById("rockets").innerText = '' + game.buyedRockets;
         }
     }
 }
@@ -237,7 +250,7 @@ class Game
 
         this.ctx = context;
         this.canvasstroke = new CanvasStroke(0,0,this.ctx);
-        this.enemyhp = 1000;
+        this.enemyhp = 500;
 
         this.enemydownSound = new Audio();
         this.enemydownSound.src = "sound/enemydown.mp3";
@@ -267,6 +280,10 @@ class Game
         this.enemies = [this.tankimg,this.jetimg];
         this.i = Helper.getRandomInt(0,1);
         this.buyedRockets = 0;
+        this.level = 1;
+        this.point = 0;
+        this.levelUpPoint = 60;
+        this.rocketDamage = 60;
         this.loop();
     }
 
@@ -303,16 +320,27 @@ class Game
             if (rocket.x <= TANK_X + 300 + this.num & rocket.y > TANK_Y + 70 + this.num)
             {
                 Helper.removeIndex(this.rockets, index);
-                this._enemyUpdate(100);
-                if (this.enemyhp < 0)
+                this._enemyUpdate(this.rocketDamage);
+                if (this.enemyhp <= 0)
                 {
-                    this.enemyhp =  1000;
+                    this.enemyhp =  500;
                     this._newEnemy();
                     this._moneyUpdate(50);
                     this._destroyedEnemy();
+                    this._pointUpdate(20)
                     Helper.playSound(this.enemydownSound);
                     document.getElementById("game-money").innerText = '' + this.money;
                     document.getElementById("enemy-hp").innerText = '' + this.enemyhp;
+                    document.getElementById("game-point").innerText = '' + this.point;
+                    if (this.point === this.levelUpPoint)
+                    {
+                        this.level++;
+                        this.levelUpPoint += 20;
+                        this.point = 0;
+                        document.getElementById("game-point").innerText = '' + this.point;
+                        document.getElementById("level-up-point").innerText = '' + this.levelUpPoint;
+                        document.getElementById("game-level").innerText = '' + this.level;
+                    }
                 }
                 Helper.playSound(this.rocketSound);
             }
@@ -378,13 +406,24 @@ class Game
     {
         if (this.enemyhp === 0)
         {
-            this.enemyhp =  1000;
+            this.enemyhp =  500;
             this._moneyUpdate(50);
             this._newEnemy();
             this._destroyedEnemy();
+            this._pointUpdate(20)
             Helper.playSound(this.enemydownSound);
             document.getElementById("game-money").innerText = '' + this.money;
             document.getElementById("enemy-hp").innerText = '' + this.enemyhp;
+            document.getElementById("game-point").innerText = '' + this.point;
+            if (this.point === this.levelUpPoint)
+            {
+                this.level++;
+                this.levelUpPoint += 20;
+                this.point = 0;
+                document.getElementById("game-point").innerText = '' + this.point;
+                document.getElementById("level-up-point").innerText = '' + this.levelUpPoint;
+                document.getElementById("game-level").innerText = '' + this.level;
+            }
         }
         else{
             this.enemyhp -= damage;
@@ -407,6 +446,12 @@ class Game
     _newEnemy()
     {
         this.i = Helper.getRandomInt(0,1);
+    }
+
+    _pointUpdate(value)
+    {
+        this.point += value;
+        document.getElementById("game-point").innerText = '' + this.point;
     }
 
 }
