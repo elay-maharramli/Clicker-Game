@@ -347,6 +347,26 @@ class Game
             rocket.update();
         });
 
+        if (this.level === 1)
+        {
+            document.getElementById("game-level").style.color = "grey";
+        }
+        if (this.level === 3)
+        {
+            document.getElementById("game-level").style.color = "lightgreen";
+        }
+        if (this.level === 6)
+        {
+            document.getElementById("game-level").style.color = "blue";
+        }
+        if (this.level === 11)
+        {
+            document.getElementById("game-level").style.color = "pink";
+        }
+        if (this.level === 16)
+        {
+            document.getElementById("game-level").style.color = "red";
+        }
     }
 
     draw()
